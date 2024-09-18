@@ -22,4 +22,11 @@ class DefineArgumentKey {
   static const String link = "link";
   static const String profileImage = "profile_image";
   static const String displayName = "display_name";
+  static const String reputationHistoryType = "reputation_history_type";
+  static const String reputationChange = "reputation_change";
+  static const String postId = "post_id";
+  static const String items = "items";
+  static const String hasMore = "has_more";
+  static const String quotaMax = "quota_max";
+  static const String quotaRemaining = "quota_remaining";
 }

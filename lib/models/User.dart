@@ -3,25 +3,25 @@ import 'package:sof/models/BadgeCount.dart';
 
 class User {
   BadgeCounts badgeCounts;
-  int accountId;
-  bool isEmployee = false;
-  int lastModifiedDate = 0;
-  int lastAccessDate = 0;
-  int reputationChangeYear = 0;
-  int reputationChangeQuarter = 0;
-  int reputationChangeMonth = 0;
-  int reputationChangeWeek = 0;
-  int reputationChangeDay = 0;
-  int reputation = 0;
-  int creationDate = 0;
+  int? accountId;
+  bool? isEmployee = false;
+  int? lastModifiedDate = 0;
+  int? lastAccessDate = 0;
+  int? reputationChangeYear = 0;
+  int? reputationChangeQuarter = 0;
+  int? reputationChangeMonth = 0;
+  int? reputationChangeWeek = 0;
+  int? reputationChangeDay = 0;
+  int? reputation = 0;
+  int? creationDate = 0;
   String? userType;
-  int userId;
-  int acceptRate = 0;
+  int? userId;
+  int? acceptRate = 0;
   String? location;
   String? websiteUrl;
   String? link;
   String? profileImage;
-  String displayName;
+  String? displayName;
 
   User({
     required this.badgeCounts,
@@ -69,30 +69,5 @@ class User {
       profileImage: data[DefineArgumentKey.profileImage],
       displayName: data[DefineArgumentKey.displayName],
     );
-  }
-
-  Map<String, Object> toMap() {
-    return {
-      DefineArgumentKey.badgeCounts: badgeCounts.toMap(),
-      DefineArgumentKey.accountId: accountId,
-      DefineArgumentKey.isEmployee: isEmployee,
-      DefineArgumentKey.lastModifiedDate: lastModifiedDate,
-      DefineArgumentKey.lastAccessDate: lastAccessDate,
-      DefineArgumentKey.reputationChangeYear: reputationChangeYear,
-      DefineArgumentKey.reputationChangeQuarter: reputationChangeQuarter,
-      DefineArgumentKey.reputationChangeMonth: reputationChangeMonth,
-      DefineArgumentKey.reputationChangeWeek: reputationChangeWeek,
-      DefineArgumentKey.reputationChangeDay: reputationChangeDay,
-      DefineArgumentKey.reputation: reputation,
-      DefineArgumentKey.creationDate: creationDate,
-      DefineArgumentKey.userType: userType ?? "",
-      DefineArgumentKey.userId: userId,
-      DefineArgumentKey.acceptRate: acceptRate,
-      DefineArgumentKey.location: location ?? "",
-      DefineArgumentKey.websiteUrl: websiteUrl ?? "",
-      DefineArgumentKey.link: link ?? "",
-      DefineArgumentKey.profileImage: profileImage ?? "",
-      DefineArgumentKey.displayName: displayName,
-    };
   }
 }
