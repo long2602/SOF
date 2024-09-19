@@ -60,50 +60,51 @@ class SOFApiService {
       response = await get(
         uri,
         headers: headers,
-      ).timeout(const Duration(seconds: 10), onTimeout: () => Response('timeout', 408));
+      ).timeout(const Duration(seconds: 10), onTimeout: () => Response(DefineServerErrorCode.messageTIMEOUT, DefineServerErrorCode.TIMEOUT));
 
       apiResponse = ApiResponse(
         status: Status.Complete,
         statusCode: response.statusCode,
-        message: "",
+        message: messageResponse(response),
         data: ItemReputationUserListModel.fromJson(jsonDecode(response.body)),
       );
     } on Exception catch (e) {
       debugPrint("[Error] Exception: ${e.toString()}");
-      return ApiResponse.error("");
+      return ApiResponse.error(e.toString());
     }
     return apiResponse;
   }
 
-  dynamic returnResponse(Response response) {
+  String messageResponse(Response response) {
     switch (response.statusCode) {
       case DefineServerErrorCode.SUCCESS:
-        jsonDecode(response.body);
-        break;
+        return DefineServerErrorCode.messageSUCCESS;
       case DefineServerErrorCode.BAD_PARAMETER:
-        break;
+        return DefineServerErrorCode.messageBAD_PARAMETER;
       case DefineServerErrorCode.ACCESS_TOKEN_REQUIRED:
-        break;
+        return DefineServerErrorCode.messageACCESS_TOKEN_REQUIRED;
       case DefineServerErrorCode.INVALID_ACCESS_TOKEN:
-        break;
+        return DefineServerErrorCode.messageINVALID_ACCESS_TOKEN;
       case DefineServerErrorCode.ACCESS_DENIED:
-        break;
+        return DefineServerErrorCode.messageACCESS_DENIED;
       case DefineServerErrorCode.NO_METHOD:
-        break;
+        return DefineServerErrorCode.messageNO_METHOD;
       case DefineServerErrorCode.KEY_REQUIRED:
-        break;
+        return DefineServerErrorCode.messageKEY_REQUIRED;
       case DefineServerErrorCode.ACCESS_TOKEN_COMPROMISED:
-        break;
+        return DefineServerErrorCode.messageACCESS_TOKEN_COMPROMISED;
       case DefineServerErrorCode.WRITE_FAILED:
-        break;
+        return DefineServerErrorCode.messageWRITE_FAILED;
       case DefineServerErrorCode.DUPLICATE_REQUEST:
-        break;
+        return DefineServerErrorCode.messageDUPLICATE_REQUEST;
       case DefineServerErrorCode.INTERNAL_ERROR:
-        break;
+        return DefineServerErrorCode.messageINTERNAL_ERROR;
       case DefineServerErrorCode.THROTTLE_VIOLATION:
-        break;
+        return DefineServerErrorCode.messageTHROTTLE_VIOLATION;
       case DefineServerErrorCode.TEMPORARILY_UNAVAILABLE:
-        break;
+        return DefineServerErrorCode.messageTEMPORARILY_UNAVAILABLE;
+      default:
+        return "Timeout";
     }
   }
 }

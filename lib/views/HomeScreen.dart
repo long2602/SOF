@@ -4,6 +4,7 @@ import 'package:sof/view_model/UserProvider.dart';
 import 'package:sof/views/widget/ItemUser.dart';
 import 'package:sof/views/widget/WidgetCircularIndicator.dart';
 import 'package:sof/views/widget/WidgetSkeleton.dart';
+import 'package:sof/views/widget/widgetErrorLoading.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -69,9 +70,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
 
                 if (userProvider.errorMessage.isNotEmpty) {
-                  return Center(
-                    child: Text(userProvider.errorMessage),
-                  );
+                  return widgetErrorLoading(
+                      message: userProvider.errorMessage,
+                      func: () {
+                        Provider.of<UserProvider>(context, listen: false).fetchItemUserListApi(page: _page).then((_) => _isFetching = false);
+                      });
                 }
 
                 return ListView.builder(
@@ -94,6 +97,18 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Consumer<UserProvider>(
               builder: (context, userProvider, _) {
+                if (userProvider.isLoading && userProvider.users.isEmpty) {
+                  return const WidgetSkeleton();
+                }
+
+                if (userProvider.errorMessage.isNotEmpty) {
+                  return widgetErrorLoading(
+                      message: userProvider.errorMessage,
+                      func: () {
+                        Provider.of<UserProvider>(context, listen: false).fetchItemUserListApi(page: _page).then((_) => _isFetching = false);
+                      });
+                }
+
                 return ListView.builder(
                   itemCount: userProvider.usersBookMarked.length,
                   itemBuilder: (context, index) {

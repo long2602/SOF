@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:sof/models/ReputationUser.dart';
 
+import '../commons/DefineServerErrorCode.dart';
+import '../models/ApiResponse.dart';
 import '../services/SOFApiService.dart';
 
 class ReputationHistoryProvider with ChangeNotifier {
@@ -23,19 +25,25 @@ class ReputationHistoryProvider with ChangeNotifier {
 
     _apiService.getUserDetail(userId: userId, page: page, pageSize: pageSize).then(
       (value) {
-        if (value.data == null || (value.data != null && value.data!.reputationUser.isEmpty)) {
-          _isHasMoreData = false;
-        } else {
-          _reputationHistories.addAll(value.data!.reputationUser);
+        if (value.status == Status.Error) {
           _isLoading = false;
-          _errorMessage = "";
+          _errorMessage = DefineServerErrorCode.messageCommonError;
           notifyListeners();
+        } else {
+          if (value.data == null || (value.data != null && value.data!.reputationUser.isEmpty)) {
+            _isHasMoreData = false;
+          } else {
+            _reputationHistories.addAll(value.data!.reputationUser);
+            _isLoading = false;
+            _errorMessage = "";
+            notifyListeners();
+          }
         }
       },
     ).onError(
       (error, stackTrace) {
         _isLoading = false;
-        _errorMessage = "Failed to load data. Please try again later.";
+        _errorMessage = DefineServerErrorCode.messageCommonError;
         notifyListeners();
       },
     );

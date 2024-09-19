@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:sof/commons/DefineServerErrorCode.dart';
+import 'package:sof/models/ApiResponse.dart';
 import 'package:sof/services/SOFApiService.dart';
 import 'package:sof/services/SharedPreferenceService.dart';
 
@@ -33,19 +35,25 @@ class UserProvider with ChangeNotifier {
 
     _apiService.fetchListUsers(page: page, pageSize: 30).then(
       (value) {
-        if (value.data == null || (value.data != null && value.data!.users.isEmpty)) {
-          _isHasMoreData = false;
-        } else {
-          _users.addAll(value.data!.users);
+        if (value.status == Status.Error) {
           _isLoading = false;
-          _errorMessage = "";
+          _errorMessage = DefineServerErrorCode.messageCommonError;
           notifyListeners();
+        } else {
+          if (value.data == null || (value.data != null && value.data!.users.isEmpty)) {
+            _isHasMoreData = false;
+          } else {
+            _users.addAll(value.data!.users);
+            _isLoading = false;
+            _errorMessage = "";
+            notifyListeners();
+          }
         }
       },
     ).onError(
       (error, stackTrace) {
         _isLoading = false;
-        _errorMessage = "Failed to load data. Please try again later.";
+        _errorMessage = DefineServerErrorCode.messageCommonError;
         notifyListeners();
       },
     );
