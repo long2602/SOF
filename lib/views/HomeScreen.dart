@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Consumer<UserProvider>(
               builder: (context, userProvider, _) {
-                if (userProvider.isLoading && userProvider.users.isEmpty) {
+                if (userProvider.isLoading && userProvider.usersBookMarked.isEmpty) {
                   return const WidgetSkeleton();
                 }
 
@@ -107,6 +107,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       func: () {
                         Provider.of<UserProvider>(context, listen: false).fetchItemUserListApi(page: _page).then((_) => _isFetching = false);
                       });
+                }
+
+                if (userProvider.usersBookMarked.isEmpty) {
+                  return const Center(child: Text("Bookmarks empty"));
                 }
 
                 return ListView.builder(
