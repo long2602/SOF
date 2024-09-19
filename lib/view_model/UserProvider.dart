@@ -11,6 +11,7 @@ class UserProvider with ChangeNotifier {
   bool _isHasMoreData = true;
   final List<User> _users = [];
   List<int> _userBookMarkedIds = [];
+  String _errorMessage = "";
 
   UserProvider() {
     fetchItemUserListApi();
@@ -22,10 +23,12 @@ class UserProvider with ChangeNotifier {
   List<User> get users => _users;
   List<User> get usersBookMarked => _users.where((element) => _userBookMarkedIds.contains(element.userId)).toList();
   List<int> get userBookMarkedIds => _userBookMarkedIds;
+  String get errorMessage => _errorMessage;
 
   Future<void> fetchItemUserListApi({int page = 1, int pageSize = 30}) async {
     if (_isLoading || !_isHasMoreData) return;
     _isLoading = true;
+    _errorMessage = "";
     notifyListeners();
 
     _apiService.fetchListUsers(page: page, pageSize: 30).then(
@@ -35,11 +38,16 @@ class UserProvider with ChangeNotifier {
         } else {
           _users.addAll(value.data!.users);
           _isLoading = false;
+          _errorMessage = "";
           notifyListeners();
         }
       },
     ).onError(
-      (error, stackTrace) {},
+      (error, stackTrace) {
+        _isLoading = false;
+        _errorMessage = "Failed to load data. Please try again later.";
+        notifyListeners();
+      },
     );
   }
 

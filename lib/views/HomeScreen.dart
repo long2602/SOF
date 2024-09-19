@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sof/view_model/UserProvider.dart';
 import 'package:sof/views/widget/ItemUser.dart';
+import 'package:sof/views/widget/WidgetCircularIndicator.dart';
+import 'package:sof/views/widget/WidgetSkeleton.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -51,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           bottom: const TabBar(
             tabs: [
               Tab(text: 'All'),
-              Tab(text: 'Bookmarked'),
+              Tab(text: 'Bookmarks'),
             ],
             labelColor: Colors.blue,
             unselectedLabelColor: Colors.grey,
@@ -62,12 +64,22 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Consumer<UserProvider>(
               builder: (context, userProvider, _) {
+                if (userProvider.isLoading && userProvider.users.isEmpty) {
+                  return const WidgetSkeleton();
+                }
+
+                if (userProvider.errorMessage.isNotEmpty) {
+                  return Center(
+                    child: Text(userProvider.errorMessage),
+                  );
+                }
+
                 return ListView.builder(
                   controller: _scrollController,
                   itemCount: userProvider.users.length + (userProvider.isLoading ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (index == userProvider.users.length) {
-                      return userProvider.isLoading ? const Center(child: CircularProgressIndicator()) : const SizedBox();
+                      return userProvider.isLoading ? const WidgetCircularIndicator() : const SizedBox();
                     }
                     return ItemUser(
                       user: userProvider.users[index],
