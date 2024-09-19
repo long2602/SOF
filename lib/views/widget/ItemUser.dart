@@ -5,8 +5,10 @@ import 'package:sof/models/User.dart';
 import '../DetailReputationScreen.dart';
 
 class ItemUser extends StatelessWidget {
-  const ItemUser({super.key, required this.user});
+  const ItemUser({super.key, required this.user, required this.isBookMarked, required this.toggleBookMark});
   final User user;
+  final bool isBookMarked;
+  final Function toggleBookMark;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +49,15 @@ class ItemUser extends StatelessWidget {
         ],
       ),
       trailing: IconButton(
-        onPressed: () {},
-        icon: Icon(Icons.bookmark_border_rounded),
+        onPressed: () {
+          toggleBookMark();
+        },
+        icon: isBookMarked
+            ? const Icon(
+                Icons.bookmark_rounded,
+                color: Colors.amber,
+              )
+            : const Icon(Icons.bookmark_border_rounded),
       ),
     );
   }

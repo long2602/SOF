@@ -8,15 +8,15 @@ import 'package:sof/commons/DefineServerErrorCode.dart';
 import 'package:sof/models/ApiResponse.dart';
 import 'package:sof/models/ItemListModel.dart';
 
-class HandleApi {
-  Future<ApiResponse<ItemUserListModel>> fetchListUsers(int page, int pageSize, String site) async {
+class SOFApiService {
+  Future<ApiResponse<ItemUserListModel>> fetchListUsers({int page = 1, int pageSize = 30}) async {
     ApiResponse<ItemUserListModel> apiResponse = ApiResponse.loading();
     Response? response;
     try {
       var uri = Uri.https(DefineApiServer.serverBaseUrl, DefineApiServer.serverGetUsers, {
         "page": page.toString(),
         "pagesize": pageSize.toString(),
-        "site": site,
+        "site": DefineApiServer.serverSite,
       });
 
       var headers = {
@@ -42,14 +42,14 @@ class HandleApi {
     return apiResponse;
   }
 
-  Future<ApiResponse<ItemReputationUserListModel>> getUserDetail(int userId, int page, int pageSize, String site) async {
+  Future<ApiResponse<ItemReputationUserListModel>> getUserDetail({required int userId, int page = 1, int pageSize = 30}) async {
     ApiResponse<ItemReputationUserListModel> apiResponse = ApiResponse.loading();
     Response? response;
     try {
       var uri = Uri.https(DefineApiServer.serverBaseUrl, DefineApiServer.serverGetDetailUser(userId), {
         "page": page.toString(),
         "pagesize": pageSize.toString(),
-        "site": site,
+        "site": DefineApiServer.serverSite,
       });
 
       var headers = {

@@ -29,4 +29,5 @@ class DefineArgumentKey {
   static const String hasMore = "has_more";
   static const String quotaMax = "quota_max";
   static const String quotaRemaining = "quota_remaining";
+  static const String shareBookMarkedUsers = "shareBookMarkedUsers";
 }
